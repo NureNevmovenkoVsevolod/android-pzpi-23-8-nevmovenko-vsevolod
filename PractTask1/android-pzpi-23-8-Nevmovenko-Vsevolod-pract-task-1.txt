@@ -42,7 +42,7 @@
      AndroidManifest.xml.
      Додав новий елемент інтерфейсу — кнопку. Встановив текст кнопки за допомогою атрибуту android:text="Натисніть мене". 
      У файлі MainActivity.java додав обробник натискання на кнопку. При натисканні, текст TextView змінюється на інший.
-     За допогою Git опублікував файли MainActivity.java та activity_main.xml  у свій репозиторій на GitHub у дерикторію PractTask1.
+     За допомогою Git опублікував файли MainActivity.java та activity_main.xml  у свій репозиторій на GitHub у дерикторію PractTask1.
 
 ВИСНОВКИ
      
