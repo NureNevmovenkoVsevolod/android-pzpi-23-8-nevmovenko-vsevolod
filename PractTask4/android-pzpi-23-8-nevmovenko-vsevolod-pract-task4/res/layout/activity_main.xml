@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <EditText
+        android:id="@+id/inputName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Ім'я" />
+
+    <EditText
+        android:id="@+id/inputAge"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Вік"
+        android:inputType="number" />
+
+    <Button
+        android:id="@+id/savePrefsButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Зберегти у SharedPreferences" />
+
+    <Button
+        android:id="@+id/loadPrefsButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Відобразити SharedPreferences" />
+
+    <Button
+        android:id="@+id/saveDbButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Зберегти у SQLite Database" />
+
+    <Button
+        android:id="@+id/loadDbButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Відобразити SQLite Database" />
+
+    <EditText
+        android:id="@+id/inputFileData"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Текст для збереження у файл" />
+
+    <Button
+        android:id="@+id/saveFileButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Зберегти у файл" />
+
+    <Button
+        android:id="@+id/loadFileButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Відобразити файл" />
+
+    <TextView
+        android:id="@+id/displayResults"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:text="Тут відображаються результати" />
+</LinearLayout>
