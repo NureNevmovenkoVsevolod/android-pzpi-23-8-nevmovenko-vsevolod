@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
         saveFileButton = findViewById(R.id.saveFileButton);
         loadFileButton = findViewById(R.id.loadFileButton);
         displayResults = findViewById(R.id.displayResults);
-        btnClearDB = findViewById(R.id.btnClearDB); // Инициализация кнопки очистки базы данных
+        btnClearDB = findViewById(R.id.btnClearDB); 
 
         sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         dbHelper = new DBHelper(this);
