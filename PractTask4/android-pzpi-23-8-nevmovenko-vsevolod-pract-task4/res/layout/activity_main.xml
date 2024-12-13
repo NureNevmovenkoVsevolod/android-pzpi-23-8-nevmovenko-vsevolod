@@ -37,6 +37,12 @@
         android:text="Зберегти у SQLite Database" />
 
     <Button
+        android:id="@+id/btnClearDB"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Очистити базу даних" />
+
+    <Button
         android:id="@+id/loadDbButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -66,4 +72,6 @@
         android:layout_height="wrap_content"
         android:padding="8dp"
         android:text="Тут відображаються результати" />
+
+
 </LinearLayout>
