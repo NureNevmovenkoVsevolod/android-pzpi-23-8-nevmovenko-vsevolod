@@ -67,3 +67,593 @@
 Життєвий цикл та методи Activity" я ознайомився з різними Layout, експериментував з властивостями. 
 Дослідив життєвий цикл Activity та навчився відстежувати його. Навчився поєднувати декілька Activivty.
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ДОДАТОК А
+MainActivity.java першої частини
+
+package com.example.pract21;
+
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Toast;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+
+public class MainActivity extends AppCompatActivity {
+
+   @Override
+   protected void onCreate(Bundle savedInstanceState) {
+       super.onCreate(savedInstanceState);
+       setContentView(R.layout.activity_main);
+       ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+           Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+           v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+           return insets;
+       });
+   }
+
+   // Обробник для кнопки 1
+   public void onButton1Click(View view) {
+       Toast.makeText(this, "Button 1 Clicked", Toast.LENGTH_SHORT).show();
+   }
+
+   // Обробник для кнопки 2
+   public void onButton2Click(View view) {
+       Toast.makeText(this, "Button 2 Clicked", Toast.LENGTH_SHORT).show();
+   }
+
+   // Обробник для кнопки 3
+   public void onButton3Click(View view) {
+       Toast.makeText(this, "Button 3 Clicked", Toast.LENGTH_SHORT).show();
+   }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ДОДАТОК Б
+activity_main.xml першої частини
+
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+   xmlns:app="http://schemas.android.com/apk/res-auto"
+   xmlns:tools="http://schemas.android.com/tools"
+   android:id="@+id/main"
+   android:layout_width="match_parent"
+   android:layout_height="match_parent"
+   android:padding="16dp"
+   tools:context=".MainActivity">
+
+   <TextView
+       android:id="@+id/welcomeText"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:text="Welcome to the App"
+       android:textSize="20sp"
+       android:textColor="@android:color/black"
+       android:gravity="center"
+       app:layout_constraintTop_toTopOf="parent"
+       app:layout_constraintStart_toStartOf="parent"
+       app:layout_constraintEnd_toEndOf="parent"
+       android:layout_marginTop="32dp"/>
+
+   <ImageView
+       android:id="@+id/imageView"
+       android:layout_width="100dp"
+       android:layout_height="100dp"
+       android:src="@drawable/ic_launcher_foreground"
+       android:layout_gravity="center"
+       app:layout_constraintTop_toBottomOf="@id/welcomeText"
+       app:layout_constraintStart_toStartOf="parent"
+       app:layout_constraintEnd_toEndOf="parent"
+       android:layout_marginTop="16dp"/>
+
+   <LinearLayout
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:orientation="vertical"
+       app:layout_constraintTop_toBottomOf="@id/imageView"
+       app:layout_constraintStart_toStartOf="parent"
+       app:layout_constraintEnd_toEndOf="parent"
+       android:layout_marginTop="16dp">
+
+       <Button
+           android:id="@+id/button1"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:text="Button 1"
+           android:gravity="center"
+           android:backgroundTint="@android:color/holo_blue_light"
+           android:layout_marginBottom="8dp"
+           android:onClick="onButton1Click"/>
+
+       <Button
+           android:id="@+id/button2"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:text="Button 2"
+           android:gravity="center"
+           android:backgroundTint="@android:color/holo_green_light"
+           android:layout_marginBottom="8dp"
+           android:onClick="onButton2Click"/>
+
+       <Button
+           android:id="@+id/button3"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:text="Button 3"
+           android:gravity="center"
+           android:backgroundTint="@android:color/holo_red_light"
+           android:onClick="onButton3Click"/>
+   </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ДОДАТОК В
+MainActivity.java другої частини
+
+package com.example.pract22;
+
+import android.os.Bundle;
+
+import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+
+public class MainActivity extends AppCompatActivity {
+
+   @Override
+   protected void onCreate(Bundle savedInstanceState) {
+       super.onCreate(savedInstanceState);
+       EdgeToEdge.enable(this);
+       setContentView(R.layout.activity_main);
+       ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+           Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+           v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+           return insets;
+       });
+   }
+}
+
+
+
+
+
+
+
+ДОДАТОК Г
+activity_main.xml другої частини
+
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+   xmlns:app="http://schemas.android.com/apk/res-auto"
+   xmlns:tools="http://schemas.android.com/tools"
+   android:id="@+id/main"
+   android:layout_width="match_parent"
+   android:layout_height="match_parent"
+   tools:context=".MainActivity">
+
+   <LinearLayout
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:orientation="vertical"
+       android:padding="16dp">
+
+       <!-- LinearLayout Example -->
+       <LinearLayout
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:orientation="vertical"
+           android:padding="8dp"
+           android:background="#DDDDDD"
+           android:layout_marginBottom="16dp"
+           android:gravity="center">
+
+           <TextView
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:text="LinearLayout"
+               android:textSize="18sp"
+               android:textColor="#000" />
+
+           <Button
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:text="Linear 1"
+               android:layout_weight="1" />
+
+           <Button
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:text="Linear 2"
+               android:layout_weight="1" />
+       </LinearLayout>
+
+       <!-- RelativeLayout Example -->
+       <RelativeLayout
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:background="#CCCCFF"
+           android:padding="8dp"
+           android:layout_marginBottom="16dp">
+
+           <TextView
+               android:id="@+id/textView"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:text="RelativeLayout"
+               android:textSize="18sp"
+               android:textColor="#000" />
+
+           <Button
+               android:id="@+id/button1"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_below="@id/textView"
+               android:layout_alignParentStart="true"
+               android:text="Relative 1" />
+
+           <Button
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_below="@id/textView"
+               android:layout_toEndOf="@id/button1"
+               android:layout_marginStart="8dp"
+               android:text="Relative 2" />
+       </RelativeLayout>
+
+       <!-- ConstraintLayout Example -->
+       <androidx.constraintlayout.widget.ConstraintLayout
+           android:layout_width="match_parent"
+           android:layout_height="200dp"
+           android:background="#FFCCCB"
+           android:layout_marginBottom="16dp">
+
+           <TextView
+               android:id="@+id/constraintText"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:text="ConstraintLayout"
+               android:textSize="18sp"
+               android:textColor="#000"
+               app:layout_constraintTop_toTopOf="parent"
+               app:layout_constraintStart_toStartOf="parent"
+               app:layout_constraintEnd_toEndOf="parent" />
+
+           <Button
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:text="Button"
+               app:layout_constraintTop_toBottomOf="@id/constraintText"
+               app:layout_constraintStart_toStartOf="parent"
+               app:layout_constraintEnd_toEndOf="parent"
+               app:layout_constraintBottom_toBottomOf="parent" />
+       </androidx.constraintlayout.widget.ConstraintLayout>
+
+       <!-- FrameLayout Example -->
+       <FrameLayout
+           android:layout_width="match_parent"
+           android:layout_height="200dp"
+           android:background="#D3D3D3"
+           android:layout_marginBottom="16dp">
+
+           <ImageView
+               android:layout_width="match_parent"
+               android:layout_height="match_parent"
+               android:src="@drawable/ic_launcher_background" />
+
+           <TextView
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:text="FrameLayout"
+               android:textSize="18sp"
+               android:textColor="#FFF"
+               android:layout_gravity="center" />
+       </FrameLayout>
+
+       <!-- GridLayout Example -->
+       <GridLayout
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:rowCount="2"
+           android:columnCount="2"
+           android:background="#ADD8E6"
+           android:padding="8dp">
+
+           <TextView
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:text="GridLayout"
+               android:textSize="18sp"
+               android:layout_row="0"
+               android:layout_column="0" />
+
+           <Button
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:text="Grid 1"
+               android:layout_row="1"
+               android:layout_column="0" />
+
+           <Button
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:text="Grid 2"
+               android:layout_row="1"
+               android:layout_column="1" />
+       </GridLayout>
+
+   </LinearLayout>
+</ScrollView>
+
+
+
+ДОДАТОК Д
+MainActivity.java третьої частини
+
+package com.example.pract23;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+import android.widget.Button;
+import android.widget.EditText;
+import androidx.appcompat.app.AppCompatActivity;
+
+public class MainActivity extends AppCompatActivity {
+
+   @Override
+   protected void onCreate(Bundle savedInstanceState) {
+       super.onCreate(savedInstanceState);
+       setContentView(R.layout.activity_main);
+       Log.d("Activity1", "onCreate called");
+
+       EditText editText = findViewById(R.id.editText);
+       Button button = findViewById(R.id.button);
+
+       button.setOnClickListener(view -> {
+
+           startActivity(new Intent(MainActivity.this, SecondActivity.class));
+       });
+
+       if (savedInstanceState != null) {
+           String savedText = savedInstanceState.getString("savedText");
+           editText.setText(savedText);
+       }
+   }
+
+   @Override
+   protected void onStart() {
+       super.onStart();
+       Log.d("Activity1", "onStart called");
+   }
+
+   @Override
+   protected void onResume() {
+       super.onResume();
+       Log.d("Activity1", "onResume called");
+   }
+
+   @Override
+   protected void onPause() {
+       super.onPause();
+       Log.d("Activity1", "onPause called");
+   }
+
+   @Override
+   protected void onStop() {
+       super.onStop();
+       Log.d("Activity1", "onStop called");
+   }
+
+   @Override
+   protected void onDestroy() {
+       super.onDestroy();
+       Log.d("Activity1", "onDestroy called");
+   }
+
+   @Override
+   protected void onSaveInstanceState(Bundle outState) {
+       super.onSaveInstanceState(outState);
+       EditText editText = findViewById(R.id.editText);
+       outState.putString("savedText", editText.getText().toString());
+       Log.d("Activity1", "onSaveInstanceState called");
+   }
+}
+
+
+
+
+
+
+ДОДАТОК Е
+activity_main.xml третьої частини
+
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+   android:layout_width="match_parent"
+   android:layout_height="match_parent"
+   android:orientation="vertical"
+   android:padding="16dp">
+
+   <EditText
+       android:id="@+id/editText"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:hint="Enter some text" />
+
+   <Button
+       android:id="@+id/button"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:text="Перейти до другої активності" />
+</LinearLayout>
+
+
+
+
+
+
+ДОДАТОК Є
+SecondActivity.java третьої частини
+
+package com.example.pract23;
+
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import androidx.appcompat.app.AppCompatActivity;
+
+public class SecondActivity extends AppCompatActivity {
+
+   @Override
+   protected void onCreate(Bundle savedInstanceState) {
+       super.onCreate(savedInstanceState);
+       setContentView(R.layout.activity_second);
+       Log.d("Activity2", "onCreate called");
+
+       Button finishButton = findViewById(R.id.buttonFinish);
+       finishButton.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+               finish();
+           }
+       });
+   }
+
+   @Override
+   protected void onStart() {
+       super.onStart();
+       Log.d("Activity2", "onStart called");
+   }
+
+   @Override
+   protected void onResume() {
+       super.onResume();
+       Log.d("Activity2", "onResume called");
+   }
+
+   @Override
+   protected void onPause() {
+       super.onPause();
+       Log.d("Activity2", "onPause called");
+   }
+
+   @Override
+   protected void onStop() {
+       super.onStop();
+       Log.d("Activity2", "onStop called");
+   }
+
+   @Override
+   protected void onDestroy() {
+       super.onDestroy();
+       Log.d("Activity2", "onDestroy called");
+   }
+}
+
+
+
+
+
+
+ДОДАТОК Ж
+activity_second.xml третьої частини
+
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+   android:layout_width="match_parent"
+   android:layout_height="match_parent"
+   android:orientation="vertical"
+   android:padding="16dp">
+
+   <TextView
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:text="Друга активність" />
+
+   <Button
+       android:id="@+id/buttonFinish"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:text="Завершити активність" />
+</LinearLayout>
+
+
+
+
+
+
+
+
