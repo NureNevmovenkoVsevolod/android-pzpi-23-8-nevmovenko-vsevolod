@@ -1,1 +1,474 @@
+Харківський університет радіоелектроніки
+Факультет комп'ютерних наук
+Кафедра програмної інженерії
+
+
+
+
+
+
+ЗВІТ
+до практичного заняття 3 з дисципліни
+"Програмування під Android"
+на тему "Діалогові панелі. Обробник черг повідомлень. Списки з прогортанням"
+
+
+
+
+
+
+
+
+
+
+                                           Виконав ст. гр ПЗПІ-23-8
+Невмовенко Всеволод Олександрович
+Перевірив
+ст. викладач кафедри ПІ
+Сокорчук Ігор Петрович
+
+
+
+
+
+
+
+Харків 2024
+МЕТА
+
+Метою цього практичного заняття було освоєння основних компонентів Android, таких як діалогові панелі, обробка черг повідомлень та робота з RecyclerView, а також набуття навичок створення ефективних і зручних користувацьких інтерфейсів, оптимізації взаємодії між потоками та відображення даних у списках із прогортанням.
+
+ЗАВДАННЯ
+
+Діалогові панелі (Dialog) в Android:
+Додати кнопки для виклику AlertDialog, DatePickerDialog та Custom Dialog.
+Реалізувати логіку відображення діалогових панелей у MainActivity.
+Створити XML-файл для індивідуальної діалогової панелі.
+Обробник черг повідомлень (Handler) в Android:
+Реалізувати обробку повідомлень через Handler для оновлення інтерфейсу користувача після виконання фонових завдань.
+Списки з прогортанням (RecyclerView Adapter):
+Додати компонент RecyclerView до основного макета.
+Створити макет для елементів списку.
+Реалізувати адаптер (Adapter) і ViewHolder.
+Підключити RecyclerView до адаптера та протестувати відображення даних.
+
+
+
+
+ХІД РОБОТИ
+
+Діалогові панелі (Dialog) в Android:
+Додано кнопки для виклику AlertDialog, DatePickerDialog та Custom Dialog в activity_main.xml.
+Реалізовано логіку для кожного діалогу у файлі MainActivity.java.
+Створено макет custom_dialog.xml для індивідуальної діалогової панелі.
+Протестовано відображення кожного діалогу.
+Обробник черг повідомлень (Handler) в Android:
+Додано кнопку для запуску обробки повідомлень через Handler.
+Реалізовано затримку у 2 секунди для оновлення тексту через Handler.
+Додано фоновий потік, який оновлює інтерфейс після виконання операцій.
+Списки з прогортанням (RecyclerView Adapter):
+Додано компонент RecyclerView до activity_main.xml.
+Створено макет list_item.xml для елементів списку.
+Реалізовано клас MyAdapter для управління списком.
+Підключено адаптер до RecyclerView у MainActivity.java.
+Протестовано функціонал: відображення 50 елементів списку та обробка кліків з використанням Toast.
+
+
+
+
+     
+
+
+
+ВИСНОВКИ
+
+Посилання на відео в YouTube: https://youtu.be/y2-TuHhilq4
+
+У результаті виконання завдання було набуте розуміння та практичний досвід роботи з діалоговими панелями, обробкою повідомлень через Handler та RecyclerView.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ДОДАТОК А
+MainActivity.java першої частини
+
+import android.widget.Button;
+import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+public class MainActivity extends AppCompatActivity {
+
+   private Handler handler;
+
+   @Override
+   protected void onCreate(Bundle savedInstanceState) {
+       super.onCreate(savedInstanceState);
+       setContentView(R.layout.activity_main);
+
+       handler = new Handler(Looper.getMainLooper());
+
+       // Обробник AlertDialog
+       Button showDialogButton = findViewById(R.id.showDialogButton);
+       showDialogButton.setOnClickListener(v -> new AlertDialog.Builder(MainActivity.this)
+               .setTitle("Dialog")
+               .setMessage("This is an AlertDialog example.")
+               .setPositiveButton("OK", (dialog, which) -> {
+               })
+               .setNegativeButton("Cancel", (dialog, which) -> {
+               })
+               .show());
+
+       // Обробник DatePickerDialog
+       Button showDatePickerButton = findViewById(R.id.showDatePickerButton);
+       showDatePickerButton.setOnClickListener(v -> {
+           DatePickerDialog datePickerDialog = new DatePickerDialog(MainActivity.this,
+                   (view, year, month, dayOfMonth) -> {
+                   }, 2024, 8, 1);
+           datePickerDialog.show();
+       });
+
+       // Обробник Custom Dialog
+       Button showCustomDialogButton = findViewById(R.id.showCustomDialogButton);
+       showCustomDialogButton.setOnClickListener(v -> {
+           LayoutInflater inflater = getLayoutInflater();
+           View dialogView = inflater.inflate(R.layout.custom_dialog, null);
+
+           new AlertDialog.Builder(MainActivity.this)
+                   .setView(dialogView)
+                   .setPositiveButton("OK", (dialog, id) -> {
+                   })
+                   .setNegativeButton("Cancel", (dialog, id) -> {
+                   })
+                   .create()
+                   .show();
+       });
+
+       // Обробник Handler
+       Button startHandlerButton = findViewById(R.id.startHandlerButton);
+       TextView handlerMessageTextView = findViewById(R.id.handlerMessageTextView);
+       startHandlerButton.setOnClickListener(v -> {
+           handler.postDelayed(() -> handlerMessageTextView.setText("Handler executed after delay"), 2000);
+
+           new Thread(() -> {
+               try {
+                   Thread.sleep(3000);
+               } catch (InterruptedException e) {
+                   e.printStackTrace();
+               }
+
+               handler.post(() -> handlerMessageTextView.setText("Updated from background thread"));
+           }).start();
+       });
+   }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ДОДАТОК Б
+activity_main.xml першої частини
+
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+   xmlns:app="http://schemas.android.com/apk/res-auto"
+   xmlns:tools="http://schemas.android.com/tools"
+   android:id="@+id/main"
+   android:layout_width="match_parent"
+   android:layout_height="match_parent"
+   tools:context=".MainActivity">
+
+   <LinearLayout
+       android:id="@+id/buttonContainer"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:orientation="vertical"
+       android:gravity="center"
+       app:layout_constraintTop_toTopOf="parent"
+       app:layout_constraintBottom_toBottomOf="parent"
+       app:layout_constraintStart_toStartOf="parent"
+       app:layout_constraintEnd_toEndOf="parent">
+
+       <Button
+           android:id="@+id/showDialogButton"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:text="Show AlertDialog" />
+
+       <Button
+           android:id="@+id/showDatePickerButton"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:text="Show DatePickerDialog" />
+
+       <Button
+           android:id="@+id/showCustomDialogButton"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:text="Show Custom Dialog" />
+
+       <Button
+           android:id="@+id/startHandlerButton"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:text="Start Handler" />
+
+       <TextView
+           android:id="@+id/handlerMessageTextView"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:text="Message will appear here"
+           android:layout_marginTop="20dp" />
+
+   </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ДОДАТОК В
+custom_dialog.xml для першої частини
+
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+   android:layout_width="wrap_content"
+   android:layout_height="wrap_content"
+   android:orientation="vertical"
+   android:padding="16dp">
+
+   <TextView
+       android:id="@+id/customDialogText"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:text="Це індивідуальна діалогова панель" />
+
+   <EditText
+       android:id="@+id/customDialogInput"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:hint="Введіть текст" />
+</LinearLayout>
+
+
+
+
+
+
+
+
+ДОДАТОК Г
+MainActivity.java другої частини
+
+package com.example.pract32;
+
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+public class MainActivity extends AppCompatActivity {
+
+   @Override
+   protected void onCreate(Bundle savedInstanceState) {
+       super.onCreate(savedInstanceState);
+       setContentView(R.layout.activity_main);
+
+       RecyclerView recyclerView = findViewById(R.id.recyclerView);
+
+       String[] data = new String[50];
+       for (int i = 0; i < 50; i++) {
+           data[i] = "Item " + (i + 1);
+       }
+
+       recyclerView.setLayoutManager(new LinearLayoutManager(this));
+       recyclerView.setAdapter(new MyAdapter(data, new MyAdapter.OnItemClickListener() {
+           @Override
+           public void onItemClick(int position) {
+               Toast.makeText(MainActivity.this, "Clicked on " + data[position], Toast.LENGTH_SHORT).show();
+           }
+       }));
+   }
+}
+
+
+ДОДАТОК Д
+MyAdapter.java другої частини
+
+package com.example.pract32;
+
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+
+import androidx.recyclerview.widget.RecyclerView;
+
+public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
+
+   private String[] mData;
+   private OnItemClickListener mListener;
+
+   public MyAdapter(String[] data, OnItemClickListener listener) {
+       mData = data;
+       mListener = listener;
+   }
+
+   public interface OnItemClickListener {
+       void onItemClick(int position);
+   }
+
+   public static class ViewHolder extends RecyclerView.ViewHolder {
+       public TextView textView;
+
+       public ViewHolder(View v, final OnItemClickListener listener) {
+           super(v);
+           textView = v.findViewById(R.id.textView);
+
+           v.setOnClickListener(new View.OnClickListener() {
+               @Override
+               public void onClick(View v) {
+                   listener.onItemClick(getAdapterPosition());
+               }
+           });
+       }
+   }
+
+   @Override
+   public MyAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+       View v = LayoutInflater.from(parent.getContext())
+               .inflate(R.layout.list_item, parent, false);
+       return new ViewHolder(v, mListener);
+   }
+
+   @Override
+   public void onBindViewHolder(ViewHolder holder, int position) {
+       holder.textView.setText(mData[position]);
+   }
+
+   @Override
+   public int getItemCount() {
+       return mData.length;
+   }
+}
+
+
+
+
+
+
+
+ДОДАТОК Е
+activity_main.xml другої частини
+
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+   xmlns:app="http://schemas.android.com/apk/res-auto"
+   xmlns:tools="http://schemas.android.com/tools"
+   android:layout_width="match_parent"
+   android:layout_height="match_parent"
+   tools:context=".MainActivity">
+
+   <androidx.recyclerview.widget.RecyclerView
+       android:id="@+id/recyclerView"
+       android:layout_width="match_parent"
+       android:layout_height="match_parent"
+       app:layout_constraintBottom_toBottomOf="parent"
+       app:layout_constraintEnd_toEndOf="parent"
+       app:layout_constraintStart_toStartOf="parent"
+       app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+
+
+
+ДОДАТОК Ж
+list_item.xml другої частини
+
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+   android:layout_width="match_parent"
+   android:layout_height="wrap_content"
+   android:orientation="horizontal"
+   android:padding="16dp">
+
+   <TextView
+       android:id="@+id/textView"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:text="Item"
+       android:textSize="18sp" />
+
+</LinearLayout>
 
