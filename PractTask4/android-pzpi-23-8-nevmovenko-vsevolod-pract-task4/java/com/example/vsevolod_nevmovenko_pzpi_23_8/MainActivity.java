@@ -21,7 +21,7 @@ import java.io.FileOutputStream;
 public class MainActivity extends AppCompatActivity {
 
     EditText inputName, inputAge, inputFileData;
-    Button savePrefsButton, loadPrefsButton, saveDbButton, loadDbButton, saveFileButton, loadFileButton;
+    Button savePrefsButton, loadPrefsButton, saveDbButton, loadDbButton, saveFileButton, loadFileButton, btnClearDB;
     TextView displayResults;
 
     SharedPreferences sharedPreferences;
@@ -44,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
         saveFileButton = findViewById(R.id.saveFileButton);
         loadFileButton = findViewById(R.id.loadFileButton);
         displayResults = findViewById(R.id.displayResults);
+        btnClearDB = findViewById(R.id.btnClearDB); // Инициализация кнопки очистки базы данных
 
         sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         dbHelper = new DBHelper(this);
@@ -88,6 +89,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 loadFromFile();
+            }
+        });
+
+        btnClearDB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                clearDatabase();
             }
         });
     }
@@ -149,6 +157,11 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void clearDatabase() {
+        db.execSQL("DELETE FROM users");  
+        Toast.makeText(this, "Базу даних очищено", Toast.LENGTH_SHORT).show();
+    }
+
     class DBHelper extends SQLiteOpenHelper {
 
         public DBHelper(Context context) {
@@ -165,3 +178,10 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 }
+
+
+
+
+
+
+
