@@ -1,1 +1,258 @@
+Харківський університет радіоелектроніки
+Факультет комп'ютерних наук
+Кафедра програмної інженерії
+
+
+
+
+
+
+ЗВІТ
+з лабораторної роботи 2 з дисципліни
+"Програмування під Android"
+на тему "Розроблення редактору з регуляторами SeekBar"
+
+
+
+
+
+
+
+
+
+
+Виконав ст. гр ПЗПІ-23-8
+Невмовенко Всеволод Олександрович
+Перевірив
+ст. викладач кафедри ПІ
+Сокорчук Ігор Петрович
+
+
+
+
+
+
+
+
+Харків 2024
+
+
+
+
+
+МЕТА
+
+Метою цієї лабораторної роботи є розробка редактора кольору за допомогою трьох регуляторів SeekBar для визначення компонентів кольору RGB панелі. Редактор повинен змінювати вигляд в залежності від орієнтації пристрою: у портретному режимі SeekBar мають бути внизу панелі, а в ландшафтному — праворуч.
+
+ЗАВДАННЯ
+
+Розробити інтерфейс з трьома регуляторами SeekBar для визначення значень компонентів кольору (RGB).
+Реалізувати зміну кольору панелі на основі значень SeekBar.
+В залежності від орієнтації пристрою (портретна чи ландшафтна) змінювати розташування панелі та регуляторів:
+У портретному режимі SeekBar повинні знаходитися знизу.
+У ландшафтному — справа від панелі.
+Зробити так, щоб панель змінювала колір в залежності від значень RGB.
+
+
+
+ХІД РОБОТИ
+
+Створено активність MainActivity.java, у якій було оголошено три SeekBar для кожного кольору (червоний, зелений, синій).
+Визначено контейнер для регуляторів SeekBar та для кольорової панелі.
+Додано обробники змін значень SeekBar для оновлення кольору панелі.
+Реалізовано метод configureLayoutForOrientation(), який дозволяє змінювати орієнтацію розміщення елементів в залежності від орієнтації пристрою.
+При зміні значень SeekBar автоматично оновлюється фон панелі, яка змінює свій колір відповідно до значень RGB.
+
+
+
+
+
+
+     
+
+
+
+
+
+ВИСНОВКИ
+
+Посилання на відео в YouTube: https://youtu.be/W6S47RwI65A
+
+В результаті виконання завдання було успішно реалізовано редактор кольорів з використанням трьох SeekBar для контролю компонентів кольору (RGB). Окрім того, вдається динамічно змінювати інтерфейс в залежності від орієнтації пристрою: у портретному режимі SeekBar знаходяться внизу, а в ландшафтному — праворуч. Зміна кольору панелі відбувається негайно після зміни значень SeekBar.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ДОДАТОК А
+MainActivity.java 
+package com.example.lab2;
+
+import android.content.res.Configuration;
+import android.graphics.Color;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.SeekBar;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+public class MainActivity extends AppCompatActivity {
+
+   private View colorPanel;
+   private SeekBar seekBarRed, seekBarGreen, seekBarBlue;
+   private LinearLayout mainLayout, seekbarContainer;
+
+   @Override
+   protected void onCreate(Bundle savedInstanceState) {
+       super.onCreate(savedInstanceState);
+       setContentView(R.layout.activity_main);
+
+       colorPanel = findViewById(R.id.color_panel);
+       seekBarRed = findViewById(R.id.seekBarRed);
+       seekBarGreen = findViewById(R.id.seekBarGreen);
+       seekBarBlue = findViewById(R.id.seekBarBlue);
+       mainLayout = findViewById(R.id.main_layout);
+       seekbarContainer = findViewById(R.id.seekbar_container);
+
+       configureLayoutForOrientation();
+
+       // Обробник змін значень SeekBar
+       SeekBar.OnSeekBarChangeListener colorChangeListener = new SeekBar.OnSeekBarChangeListener() {
+           @Override
+           public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+               updateColorPanel();
+           }
+
+           @Override
+           public void onStartTrackingTouch(SeekBar seekBar) {}
+
+           @Override
+           public void onStopTrackingTouch(SeekBar seekBar) {}
+       };
+
+       seekBarRed.setOnSeekBarChangeListener(colorChangeListener);
+       seekBarGreen.setOnSeekBarChangeListener(colorChangeListener);
+       seekBarBlue.setOnSeekBarChangeListener(colorChangeListener);
+
+
+       updateColorPanel();
+   }
+
+   // Конфігурація в залежності від оріентації
+   private void configureLayoutForOrientation() {
+       int orientation = getResources().getConfiguration().orientation;
+
+       if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+           mainLayout.setOrientation(LinearLayout.HORIZONTAL);
+           colorPanel.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 2));
+           seekbarContainer.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1));
+       } else {
+           mainLayout.setOrientation(LinearLayout.VERTICAL);
+           colorPanel.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 2));
+           seekbarContainer.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 1));
+       }
+   }
+
+   // Оновлення кольору панелі
+   private void updateColorPanel() {
+       int red = seekBarRed.getProgress();
+       int green = seekBarGreen.getProgress();
+       int blue = seekBarBlue.getProgress();
+       int color = Color.rgb(red, green, blue);
+       colorPanel.setBackgroundColor(color);
+   }
+}
+
+
+
+
+
+
+
+
+
+
+
+ДОДАТОК Б
+activity_main.xml 
+
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+   xmlns:app="http://schemas.android.com/apk/res-auto"
+   xmlns:tools="http://schemas.android.com/tools"
+   android:layout_width="match_parent"
+   android:layout_height="match_parent"
+   tools:context=".MainActivity">
+
+   <LinearLayout
+       android:id="@+id/main_layout"
+       android:layout_width="match_parent"
+       android:layout_height="match_parent"
+       android:orientation="vertical">
+
+       <View
+           android:id="@+id/color_panel"
+           android:layout_width="match_parent"
+           android:layout_height="0dp"
+           android:layout_weight="2"
+           android:background="#FFFFFF" />
+
+       <LinearLayout
+           android:id="@+id/seekbar_container"
+           android:layout_width="match_parent"
+           android:layout_height="0dp"
+           android:layout_weight="1"
+           android:orientation="vertical">
+
+           <SeekBar
+               android:id="@+id/seekBarRed"
+               android:thumbTint="#FF0000"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:max="255" />
+
+           <SeekBar
+               android:id="@+id/seekBarGreen"
+               android:thumbTint="#00FF00"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:max="255" />
+
+           <SeekBar
+               android:id="@+id/seekBarBlue"
+               android:thumbTint="#0000FF"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:max="255" />
+       </LinearLayout>
+   </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
 
