@@ -20,7 +20,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Инициализация элементов интерфейса
         colorPanel = findViewById(R.id.color_panel);
         seekBarRed = findViewById(R.id.seekBarRed);
         seekBarGreen = findViewById(R.id.seekBarGreen);
