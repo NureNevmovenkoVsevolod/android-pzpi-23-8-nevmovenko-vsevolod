@@ -1,1 +1,407 @@
+Харківський університет радіоелектроніки
+Факультет комп'ютерних наук
+Кафедра програмної інженерії
+
+
+
+
+
+
+ЗВІТ
+до практичного заняття 4 з дисципліни
+"Програмування під Android"
+на тему "Сховища даних (Preferences, база даних SQLite, файли)"
+
+
+
+
+
+
+
+
+
+
+Виконав ст. гр ПЗПІ-23-8
+Невмовенко Всеволод Олександрович
+Перевірив
+ст. викладач кафедри ПІ
+Сокорчук Ігор Петрович
+
+
+
+
+
+
+
+
+Харків 2024
+
+
+
+
+
+
+МЕТА
+
+Метою цього практичного заняття було ознайомлення з різними способами збереження даних у Android, такими як SharedPreferences, база даних SQLite та робота з файлами, а також набуття практичних навичок їх реалізації у прикладних проектах.
+
+ЗАВДАННЯ
+
+Робота з SharedPreferences:
+Створити застосунок для збереження та відображення налаштувань користувача (ім'я, вік).
+Реалізувати автоматичне зчитування даних після перезапуску програми.
+Робота з SQLite:
+Створити базу даних для збереження інформації про користувачів (ім'я, вік).
+Реалізувати функціонал для додавання нових користувачів через форму введення.
+Відобразити список користувачів у застосунку.
+Робота з файлами:
+Створити функціонал для запису текстових даних у файл.
+Реалізувати зчитування вмісту файлу та відображення його на екрані.
+
+
+
+
+ХІД РОБОТИ
+Робота з SharedPreferences:
+У файлі activity_main.xml додано елементи для введення імені та віку, а також кнопки для збереження та відображення даних.
+У класі MainActivity створено методи saveToPreferences() та loadFromPreferences().
+Протестовано: дані коректно зберігаються у SharedPreferences та автоматично завантажуються після перезапуску застосунку.
+Робота з SQLite:
+Створено клас DBHelper, який успадковується від SQLiteOpenHelper.
+Реалізовано методи saveToDatabase() для додавання даних та loadFromDatabase() для їх відображення.
+У макеті додано кнопки для збереження та відображення списку користувачів.
+Протестовано: дані успішно додаються до бази та відображаються в текстовому полі.
+Робота з файлами:
+Реалізовано функціонал для збереження тексту у файл через метод saveToFile().
+Створено метод loadFromFile() для зчитування та відображення вмісту файлу.
+Протестовано: текст зберігається у файл та коректно завантажується на екран.
+
+
+
+
+
+
+ВИСНОВКИ
+
+Посилання на відео в YouTube: https://youtu.be/SYzM9Toe3pQ
+
+У результаті виконання завдання було отримано практичні навички роботи з різними методами збереження даних у Android:
+SharedPreferences дозволяє легко зберігати невеликі дані користувача.
+SQLite забезпечує збереження великих обсягів структурованих даних.
+Файлова система надає можливість запису та зчитування даних у текстовий файл.
+Завдяки виконаній роботі було розширено розуміння способів збереження даних, їх переваг та недоліків у різних ситуаціях.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ДОДАТОК А
+MainActivity.java 
+
+package com.example.pract4;
+
+import android.content.ContentValues;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+
+public class MainActivity extends AppCompatActivity {
+
+   EditText inputName, inputAge, inputFileData;
+   Button savePrefsButton, loadPrefsButton, saveDbButton, loadDbButton, saveFileButton, loadFileButton, btnClearDB;
+   TextView displayResults;
+
+   SharedPreferences sharedPreferences;
+   SQLiteDatabase db;
+   DBHelper dbHelper;
+   static final String PREFS_NAME = "MyPrefs";
+
+   @Override
+   protected void onCreate(Bundle savedInstanceState) {
+       super.onCreate(savedInstanceState);
+       setContentView(R.layout.activity_main);
+
+       inputName = findViewById(R.id.inputName);
+       inputAge = findViewById(R.id.inputAge);
+       inputFileData = findViewById(R.id.inputFileData);
+       savePrefsButton = findViewById(R.id.savePrefsButton);
+       loadPrefsButton = findViewById(R.id.loadPrefsButton);
+       saveDbButton = findViewById(R.id.saveDbButton);
+       loadDbButton = findViewById(R.id.loadDbButton);
+       saveFileButton = findViewById(R.id.saveFileButton);
+       loadFileButton = findViewById(R.id.loadFileButton);
+       displayResults = findViewById(R.id.displayResults);
+       btnClearDB = findViewById(R.id.btnClearDB);
+
+       sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+       dbHelper = new DBHelper(this);
+       db = dbHelper.getWritableDatabase();
+
+       savePrefsButton.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+               saveToPreferences();
+           }
+       });
+
+       loadPrefsButton.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+               loadFromPreferences();
+           }
+       });
+
+       saveDbButton.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+               saveToDatabase();
+           }
+       });
+
+       loadDbButton.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+               loadFromDatabase();
+           }
+       });
+
+       saveFileButton.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+               saveToFile();
+           }
+       });
+
+       loadFileButton.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+               loadFromFile();
+           }
+       });
+
+       btnClearDB.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+               clearDatabase();
+           }
+       });
+   }
+
+   private void saveToPreferences() {
+       SharedPreferences.Editor editor = sharedPreferences.edit();
+       editor.putString("name", inputName.getText().toString());
+       editor.putString("age", inputAge.getText().toString());
+       editor.apply();
+       Toast.makeText(this, "Дані збережено у SharedPreferences", Toast.LENGTH_SHORT).show();
+   }
+
+   private void loadFromPreferences() {
+       String name = sharedPreferences.getString("name", "No name defined");
+       String age = sharedPreferences.getString("age", "No age defined");
+       displayResults.setText("Name: " + name + "\nAge: " + age);
+   }
+
+   private void saveToDatabase() {
+       ContentValues values = new ContentValues();
+       values.put("name", inputName.getText().toString());
+       values.put("age", Integer.parseInt(inputAge.getText().toString()));
+       db.insert("users", null, values);
+       Toast.makeText(this, "Дані збережено у SQLite Database", Toast.LENGTH_SHORT).show();
+   }
+
+   private void loadFromDatabase() {
+       Cursor cursor = db.query("users", null, null, null, null, null, null);
+       StringBuilder builder = new StringBuilder();
+       while (cursor.moveToNext()) {
+           String name = cursor.getString(cursor.getColumnIndexOrThrow("name"));
+           int age = cursor.getInt(cursor.getColumnIndexOrThrow("age"));
+           builder.append("Name: ").append(name).append(", Age: ").append(age).append("\n");
+       }
+       cursor.close();
+       displayResults.setText(builder.toString());
+   }
+
+   private void saveToFile() {
+       String fileData = inputFileData.getText().toString();
+       try (FileOutputStream fos = openFileOutput("myfile.txt", Context.MODE_PRIVATE)) {
+           fos.write(fileData.getBytes());
+           Toast.makeText(this, "Дані збережено у файл", Toast.LENGTH_SHORT).show();
+       } catch (Exception e) {
+           e.printStackTrace();
+       }
+   }
+
+   private void loadFromFile() {
+       StringBuilder builder = new StringBuilder();
+       try (FileInputStream fis = openFileInput("myfile.txt")) {
+           int c;
+           while ((c = fis.read()) != -1) {
+               builder.append((char) c);
+           }
+           displayResults.setText(builder.toString());
+       } catch (Exception e) {
+           e.printStackTrace();
+       }
+   }
+
+   private void clearDatabase() {
+       db.execSQL("DELETE FROM users");
+       Toast.makeText(this, "Базу даних очищено", Toast.LENGTH_SHORT).show();
+   }
+
+   class DBHelper extends SQLiteOpenHelper {
+
+       public DBHelper(Context context) {
+           super(context, "MyDB", null, 1);
+       }
+
+       @Override
+       public void onCreate(SQLiteDatabase db) {
+           db.execSQL("CREATE TABLE users (id INTEGER PRIMARY KEY, name TEXT, age INTEGER)");
+       }
+
+       @Override
+       public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+       }
+   }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ДОДАТОК Б
+activity_main.xml 
+
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+   android:layout_width="match_parent"
+   android:layout_height="match_parent"
+   android:orientation="vertical"
+   android:padding="16dp">
+
+   <EditText
+       android:id="@+id/inputName"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:hint="Ім'я" />
+
+   <EditText
+       android:id="@+id/inputAge"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:hint="Вік"
+       android:inputType="number" />
+
+   <Button
+       android:id="@+id/savePrefsButton"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:text="Зберегти у SharedPreferences" />
+
+   <Button
+       android:id="@+id/loadPrefsButton"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:text="Відобразити SharedPreferences" />
+
+   <Button
+       android:id="@+id/saveDbButton"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:text="Зберегти у SQLite Database" />
+
+   <Button
+       android:id="@+id/btnClearDB"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:text="Очистити базу даних" />
+
+   <Button
+       android:id="@+id/loadDbButton"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:text="Відобразити SQLite Database" />
+
+   <EditText
+       android:id="@+id/inputFileData"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:hint="Текст для збереження у файл" />
+
+   <Button
+       android:id="@+id/saveFileButton"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:text="Зберегти у файл" />
+
+   <Button
+       android:id="@+id/loadFileButton"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:text="Відобразити файл" />
+
+   <TextView
+       android:id="@+id/displayResults"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:padding="8dp"
+       android:text="Тут відображаються результати" />
+
+
+</LinearLayout>
+
 
