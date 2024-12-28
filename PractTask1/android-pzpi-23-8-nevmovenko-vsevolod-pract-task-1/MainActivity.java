@@ -25,7 +25,6 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
-        // Новий код
         TextView textView = findViewById(R.id.textView);  // Пошук TextView по ID
         Button button = findViewById(R.id.button);  // Пошук Button по ID
 
