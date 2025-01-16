@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".MainActivity"
+    android:background="@color/black">
+
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/searchView_home"
+        android:layout_margin="16dp"
+        app:cardCornerRadius="8dp"
+        app:queryHint="Enter text ..."
+        app:iconifiedByDefault="false"
+        android:layout_alignParentTop="true"
+        android:background="@color/grey"
+        android:layout_width="match_parent"
+        android:layout_height="?android:attr/actionBarSize"
+        />
+    <Spinner
+        android:id="@+id/spinner_priority_filter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:layout_marginRight="6dp"
+        android:layout_marginLeft="6dp"
+        android:layout_below="@+id/searchView_home"
+        android:background="@color/grey"
+        android:entries="@array/priority_levels" />
+    
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_home"
+        android:layout_margin="8dp"
+        android:layout_below="@+id/spinner_priority_filter"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </androidx.recyclerview.widget.RecyclerView>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_add"
+        android:layout_margin="26dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:src="@drawable/ic_plus_icon"
+
+        />
+
+</RelativeLayout>
