@@ -128,7 +128,7 @@ public class NotesTakerActivity extends AppCompatActivity {
             Uri selectedImageUri = data.getData();
             if (selectedImageUri != null) {
                 try {
-                    image_url = selectedImageUri.toString(); // Сохраняем URI
+                    image_url = selectedImageUri.toString(); 
                     imageView_selected.setVisibility(View.VISIBLE);
                     Glide.with(this).load(selectedImageUri).into(imageView_selected);
                     Log.d("NotesTakerActivity", "Image loaded successfully");
